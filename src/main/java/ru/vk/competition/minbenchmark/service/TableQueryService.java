@@ -1,6 +1,7 @@
 package ru.vk.competition.minbenchmark.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.vk.competition.minbenchmark.dto.query.AddNewQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.ModifyQueryDto;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class TableQueryService {
 
     private final TableQueryRepository tableQueryRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     public void addNewTableQuery(AddNewQueryDto newQueryDto) {
         String tableName = newQueryDto.getTableName();
@@ -75,5 +77,16 @@ public class TableQueryService {
                                 e.getQuery()
                         )
                 ).collect(Collectors.toList());
+    }
+
+    public void executeTableQueryById(int id) {
+        TableQuery byQueryId = tableQueryRepository.findByQueryId(id);
+        if(byQueryId != null){
+            jdbcTemplate.execute(
+                    byQueryId.getQuery()
+            );
+        } else {
+            throw new RuntimeException("Таблицы не существует");
+        }
     }
 }

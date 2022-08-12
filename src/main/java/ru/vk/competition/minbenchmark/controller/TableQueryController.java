@@ -26,6 +26,7 @@ public class TableQueryController {
     }
 
     @PutMapping("/modify-query-in-table")
+    @ResponseStatus(HttpStatus.CREATED)
     public void modifyQueryInTable(@RequestBody ModifyQueryDto modifyQueryDto) {
         tableQueryService.modifyTableQuery(modifyQueryDto);
     }
@@ -38,7 +39,7 @@ public class TableQueryController {
 
     @GetMapping("/execute-table-query-by-id/{id}")
     public void executeTableQueryById(@PathVariable("id") int queryId) {
-
+        tableQueryService.executeTableQueryById(queryId);
     }
 
     @GetMapping("/get-all-queries-by-table-name/{name}")
