@@ -4,7 +4,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import ru.vk.competition.minbenchmark.dto.report.ReportDto;
 
-@RequestMapping
+@RequestMapping("/api/report")
+@RestController
 public class ReportController {
 
     @GetMapping("/get-report-by-id/{id}")

@@ -5,6 +5,7 @@ import reactor.core.publisher.Mono;
 import ru.vk.competition.minbenchmark.dto.CreateTableDto;
 
 @RequestMapping("/api/table")
+@RestController
 public class TableController {
 
     @PostMapping("/create-table")

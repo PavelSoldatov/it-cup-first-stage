@@ -8,6 +8,7 @@ import ru.vk.competition.minbenchmark.dto.query.ModifyQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
 
 @RequestMapping("/api/table-query")
+@RestController
 public class TableQueryController {
 
     @PostMapping("/add-new-query-to-table")
