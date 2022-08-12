@@ -1,6 +1,7 @@
 package ru.vk.competition.minbenchmark.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.vk.competition.minbenchmark.dto.CreateTableDto;
@@ -14,19 +15,19 @@ public class TableController {
     private final TableService tableService;
 
     @PostMapping("/create-table")
-    public Integer createTable(@RequestBody CreateTableDto createTableDto) {
-        tableService.createTable();
-        return 1;
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createTable(@RequestBody CreateTableDto createTableDto) {
+        tableService.createTable(createTableDto);
     }
 
     @GetMapping("/get-table-by-name/{name}")
-    public ResponseEntity<CreateTableDto> getTableByName(@PathVariable("name") String name) {
-
-        return null;
+    public CreateTableDto getTableByName(@PathVariable("name") String name) {
+        return tableService.findTableByName(name);
     }
 
     @DeleteMapping("/drop-table-by-name/{name}")
-    public Integer dropTableByName(@PathVariable("name") String name) {
-        return 1;
+    @ResponseStatus(HttpStatus.CREATED)
+    public void dropTableByName(@PathVariable("name") String name) {
+        tableService.deleteTableByName(name);
     }
 }

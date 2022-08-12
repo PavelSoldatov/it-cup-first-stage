@@ -1,25 +1,31 @@
 package ru.vk.competition.minbenchmark.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.vk.competition.minbenchmark.dto.query.AddNewQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.ModifyQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
+import ru.vk.competition.minbenchmark.repository.TableQueryRepository;
+import ru.vk.competition.minbenchmark.service.TableQueryService;
 
 @RequestMapping("/api/table-query")
 @RestController
+@RequiredArgsConstructor
 public class TableQueryController {
 
-    @PostMapping("/add-new-query-to-table")
-    public ResponseEntity<Void> tableQuery(@RequestBody AddNewQueryDto addNewQueryDto){
+    private final TableQueryService tableQueryService;
 
-        return null;
+    @PostMapping("/add-new-query-to-table")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void tableQuery(@RequestBody AddNewQueryDto addNewQueryDto) {
+        tableQueryService.addNewTableQuery(addNewQueryDto);
     }
 
     @PutMapping("/modify-query-in-table")
-    public ResponseEntity<Void> modifyQueryInTable(@RequestBody ModifyQueryDto modifyQueryDto) {
-
-        return null;
+    public void modifyQueryInTable(@RequestBody ModifyQueryDto modifyQueryDto) {
+        tableQueryService.modifyTableQuery(modifyQueryDto);
     }
 
     @DeleteMapping("/delete-table-query-by-id/{id}")
