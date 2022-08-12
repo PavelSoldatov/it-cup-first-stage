@@ -1,8 +1,7 @@
 package ru.vk.competition.minbenchmark.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import ru.vk.competition.minbenchmark.dto.query.AddNewQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.ModifyQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
@@ -12,44 +11,44 @@ import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
 public class TableQueryController {
 
     @PostMapping("/add-new-query-to-table")
-    public Mono<Void> tableQuery(@RequestBody AddNewQueryDto addNewQueryDto){
+    public ResponseEntity<Void> tableQuery(@RequestBody AddNewQueryDto addNewQueryDto){
 
-        return Mono.empty();
+        return null;
     }
 
     @PutMapping("/modify-query-in-table")
-    public Mono<Void> modifyQueryInTable(@RequestBody ModifyQueryDto modifyQueryDto) {
+    public ResponseEntity<Void> modifyQueryInTable(@RequestBody ModifyQueryDto modifyQueryDto) {
 
-        return Mono.empty();
+        return null;
     }
 
     @DeleteMapping("/delete-table-query-by-id/{id}")
-    public Mono<Void> deleteTableQueryById(@PathVariable("id") int queryId) {
+    public ResponseEntity<Void> deleteTableQueryById(@PathVariable("id") int queryId) {
 
-        return Mono.empty();
+        return null;
     }
 
     @GetMapping("/execute-table-query-by-id/{id}")
-    public Mono<Void> executeTableQueryById(@PathVariable("id") int queryId) {
+    public ResponseEntity<Void> executeTableQueryById(@PathVariable("id") int queryId) {
 
-        return Mono.empty();
+        return null;
     }
 
     @GetMapping("/get-all-queries-by-table-name/{name}")
-    public Flux<TableQueriesResponseDto> getAllQueriesByTableName(@PathVariable("name") String name) {
+    public ResponseEntity<TableQueriesResponseDto> getAllQueriesByTableName(@PathVariable("name") String name) {
 
-        return Flux.just(new TableQueriesResponseDto(1, "", ""));
+        return null;
     }
 
     @GetMapping("/get-table-query-by-id/{id}")
-    public Mono<TableQueriesResponseDto> getTableQueryById(@PathVariable("id") int queryId) {
+    public ResponseEntity<TableQueriesResponseDto> getTableQueryById(@PathVariable("id") int queryId) {
 
-        return Mono.just(new TableQueriesResponseDto(1, "", ""));
+        return null;
     }
 
     @GetMapping("/get-all-table-queries")
-    public Flux<TableQueriesResponseDto> getAllTableQueries() {
+    public ResponseEntity<TableQueriesResponseDto> getAllTableQueries() {
 
-        return Flux.just(new TableQueriesResponseDto(1, "", ""));
+        return null;
     }
 }
