@@ -13,4 +13,6 @@ public interface TableQueryRepository extends JpaRepository<TableQuery, Integer>
     TableQuery findByQueryId(Integer id);
 
     List<TableQuery> findAllByTableName(String tableName);
+
+    List<TableQuery> findAll();
 }

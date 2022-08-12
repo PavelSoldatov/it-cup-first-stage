@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.vk.competition.minbenchmark.dto.query.AddNewQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.ModifyQueryDto;
+import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
 import ru.vk.competition.minbenchmark.entity.TableQuery;
 import ru.vk.competition.minbenchmark.repository.TableQueryRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +44,36 @@ public class TableQueryService {
         } else {
             throw new RuntimeException("Таблицы не существует");
         }
+    }
+
+    public void deleteTableQueryById(int queryId) {
+        tableQueryRepository.deleteById(queryId);
+    }
+
+    public List<TableQueriesResponseDto> getAllQueriesByTableName(String name) {
+        return tableQueryRepository.findAllByTableName(name)
+                .stream().map(
+                        e -> new TableQueriesResponseDto(
+                                e.getQueryId(),
+                                e.getTableName(),
+                                e.getQuery()
+                        )
+                ).collect(Collectors.toList());
+    }
+
+    public TableQueriesResponseDto getTableQueryById(int queryId) {
+        TableQuery byQueryId = tableQueryRepository.findByQueryId(queryId);
+        return new TableQueriesResponseDto(byQueryId.getQueryId(), byQueryId.getTableName(), byQueryId.getQuery());
+    }
+
+    public List<TableQueriesResponseDto> getAllTableQueries() {
+        return tableQueryRepository.findAll()
+                .stream().map(
+                        e -> new TableQueriesResponseDto(
+                                e.getQueryId(),
+                                e.getTableName(),
+                                e.getQuery()
+                        )
+                ).collect(Collectors.toList());
     }
 }

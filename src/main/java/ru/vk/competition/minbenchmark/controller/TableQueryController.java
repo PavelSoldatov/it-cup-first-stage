@@ -10,6 +10,8 @@ import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
 import ru.vk.competition.minbenchmark.repository.TableQueryRepository;
 import ru.vk.competition.minbenchmark.service.TableQueryService;
 
+import java.util.List;
+
 @RequestMapping("/api/table-query")
 @RestController
 @RequiredArgsConstructor
@@ -29,32 +31,28 @@ public class TableQueryController {
     }
 
     @DeleteMapping("/delete-table-query-by-id/{id}")
-    public ResponseEntity<Void> deleteTableQueryById(@PathVariable("id") int queryId) {
-
-        return null;
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void deleteTableQueryById(@PathVariable("id") int queryId) {
+        tableQueryService.deleteTableQueryById(queryId);
     }
 
     @GetMapping("/execute-table-query-by-id/{id}")
-    public ResponseEntity<Void> executeTableQueryById(@PathVariable("id") int queryId) {
+    public void executeTableQueryById(@PathVariable("id") int queryId) {
 
-        return null;
     }
 
     @GetMapping("/get-all-queries-by-table-name/{name}")
-    public ResponseEntity<TableQueriesResponseDto> getAllQueriesByTableName(@PathVariable("name") String name) {
-
-        return null;
+    public List<TableQueriesResponseDto> getAllQueriesByTableName(@PathVariable("name") String name) {
+        return tableQueryService.getAllQueriesByTableName(name);
     }
 
     @GetMapping("/get-table-query-by-id/{id}")
-    public ResponseEntity<TableQueriesResponseDto> getTableQueryById(@PathVariable("id") int queryId) {
-
-        return null;
+    public TableQueriesResponseDto getTableQueryById(@PathVariable("id") int queryId) {
+        return tableQueryService.getTableQueryById(queryId);
     }
 
     @GetMapping("/get-all-table-queries")
-    public ResponseEntity<TableQueriesResponseDto> getAllTableQueries() {
-
-        return null;
+    public List<TableQueriesResponseDto> getAllTableQueries() {
+        return tableQueryService.getAllTableQueries();
     }
 }
