@@ -1,0 +1,17 @@
+package ru.vk.competition.minbenchmark.repository;
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import ru.vk.competition.minbenchmark.entity.SingleQuery;
+import ru.vk.competition.minbenchmark.entity.TableQuery;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface TableQueryRepository extends CrudRepository<TableQuery, Integer> {
+
+    TableQuery findByQueryId(Integer id);
+
+    List<TableQuery> findAllByTableName(String tableName);
+}
