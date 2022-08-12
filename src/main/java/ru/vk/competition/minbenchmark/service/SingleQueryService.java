@@ -14,7 +14,7 @@ import ru.vk.competition.minbenchmark.repository.SingleQueryRepository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -23,53 +23,44 @@ public class SingleQueryService {
 
     private final SingleQueryRepository queryRepository;
 
-    public Flux<SingleQuery> getAllQueries() {
-        return Mono.fromCallable(queryRepository::findAll)
-                .publishOn(Schedulers.boundedElastic())
-                .flatMapIterable(x -> x);
+    public List<SingleQuery> getAllQueries() {
+        return queryRepository.findAll();
     }
 
-    public Mono<SingleQuery> getQueryById(Integer id) {
-        return Mono.fromCallable(() -> queryRepository.findByQueryId(id).orElseThrow(() -> new RuntimeException(
+    public SingleQuery getQueryById(Integer id) {
+        return queryRepository.findByQueryId(id).orElseThrow(() -> new RuntimeException(
                 String.format("Cannot find tableQuery by Id %s", id.toString())
-        ))).publishOn(Schedulers.boundedElastic());
+        ));
     }
 
-    public Mono<ResponseEntity<Void>> deleteQueryById(Integer id) {
-        return Mono.fromCallable(() -> {
-            try {
-                if(queryRepository.findByQueryId(id).map(SingleQuery::getQueryId).isEmpty()) {
-                    return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
-                } else {
-                    queryRepository.deleteByQueryId(id);
-                    return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
-                }
-            } catch (Exception e) {
-                return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
+    public ResponseEntity<Void> deleteQueryById(Integer id) {
+        try {
+            if (queryRepository.findByQueryId(id).map(SingleQuery::getQueryId).isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            } else {
+                queryRepository.deleteByQueryId(id);
+                return new ResponseEntity<>(HttpStatus.ACCEPTED);
             }
-        }).publishOn(Schedulers.boundedElastic());
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
-    public Mono<ResponseEntity<Void>> addQueryWithQueryId(SingleQuery singleQuery) {
-        return Mono.fromCallable(() -> {
-            queryRepository.save(singleQuery);
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
-        }).publishOn(Schedulers.boundedElastic());
+    public ResponseEntity<Void> addQueryWithQueryId(SingleQuery singleQuery) {
+        queryRepository.save(singleQuery);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public Mono<ResponseEntity<Void>> updateQueryWithQueryId(SingleQuery singleQuery) {
-        return Mono.fromCallable(() -> {
+    public ResponseEntity<Void> updateQueryWithQueryId(SingleQuery singleQuery) {
             queryRepository.findByQueryId(singleQuery.getQueryId())
                     .orElseThrow(() -> new RuntimeException(
                             String.format("Cannot find tableQuery by ID %s", singleQuery.getQueryId())
                     ));
             queryRepository.save(singleQuery);
             return ResponseEntity.<Void>ok(null);
-        }).publishOn(Schedulers.boundedElastic());
-    }
+        }
 
-    public Mono<ResponseEntity<Void>> executeSingleQuery(Integer id) {
-        return Mono.fromCallable(() -> {
+    public ResponseEntity<Void> executeSingleQuery(Integer id) {
             Connection connection = null;
             Statement statement = null;
             Optional<String> createSql = null;
@@ -88,9 +79,8 @@ public class SingleQueryService {
                 connection.close();
                 return new ResponseEntity<Void>(HttpStatus.CREATED);
             } catch (Exception e) {
-                System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
             }
-        }).publishOn(Schedulers.boundedElastic());
     }
 }

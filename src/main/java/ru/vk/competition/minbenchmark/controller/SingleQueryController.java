@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 import ru.vk.competition.minbenchmark.entity.SingleQuery;
 import ru.vk.competition.minbenchmark.service.SingleQueryService;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/single-query")
@@ -18,27 +20,27 @@ public class SingleQueryController {
     private final SingleQueryService singleQueryService;
 
     @GetMapping("/get-all-single-queries")
-    public Flux<SingleQuery> getAllTableQueries() {
+    public List<SingleQuery> getAllTableQueries() {
         return singleQueryService.getAllQueries();
     }
 
     @GetMapping("/get-single-query-by-id/{id}")
-    public Mono<SingleQuery> getTableQueryById(@PathVariable Integer id) {
+    public SingleQuery getTableQueryById(@PathVariable Integer id) {
         return singleQueryService.getQueryById(id);
     }
 
     @DeleteMapping("/delete-single-query-by-id/{id}")
-    public Mono<ResponseEntity<Void>> deleteTableQueryById(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteTableQueryById(@PathVariable Integer id) {
         return singleQueryService.deleteQueryById(id);
     }
 
     @PostMapping("/add-new-query")
-    public Mono<ResponseEntity<Void>> addNewQueryToTable(@RequestBody SingleQuery singleQuery) {
+    public ResponseEntity<Void> addNewQueryToTable(@RequestBody SingleQuery singleQuery) {
         return singleQueryService.addQueryWithQueryId(singleQuery);
     }
 
     @PutMapping("/modify-single-query")
-    public Mono<ResponseEntity<Void>> modifyQueryInTable(@RequestBody SingleQuery singleQuery) {
+    public ResponseEntity<Void> modifyQueryInTable(@RequestBody SingleQuery singleQuery) {
         return singleQueryService.updateQueryWithQueryId(singleQuery);
     }
 }
