@@ -1,5 +1,5 @@
 server:
-  port: 9081
+  port: 8080
 
 spring:
   mvc:
@@ -11,4 +11,7 @@ spring:
     password: password
     driverClassName: org.h2.Driver
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
