@@ -9,5 +9,4 @@ public class MinbenchmarkApplication {
     public static void main(String[] args) {
         SpringApplication.run(MinbenchmarkApplication.class, args);
     }
-
 }
