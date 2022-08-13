@@ -17,7 +17,6 @@ public class TableQuery {
 
     @Id
     @Column(name = "queryId")
-    @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer queryId;
 
     @Column(name = "query")

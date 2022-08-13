@@ -22,7 +22,7 @@ public class SingleQueryService {
     private final SingleQueryRepository queryRepository;
 
     public List<SingleQuery> getAllQueries() {
-        return (List<SingleQuery>) queryRepository.findAll();
+        return queryRepository.findAll();
     }
 
     public SingleQuery getQueryById(Integer id) {
