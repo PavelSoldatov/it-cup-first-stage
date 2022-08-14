@@ -29,7 +29,7 @@ public class TableController {
         return tableService.findTableByName(name);
     }
 
-    @DeleteMapping("/drop-table-by-name/{name}")
+    @DeleteMapping("/drop-table/{name}")
     @ResponseStatus(HttpStatus.CREATED)
     public void dropTableByName(@PathVariable("name") String name) {
         log.info("dropTableByName " + name);
