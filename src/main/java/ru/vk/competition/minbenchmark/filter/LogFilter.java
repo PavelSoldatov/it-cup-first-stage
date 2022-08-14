@@ -37,9 +37,9 @@ public class LogFilter implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-//        if (request.getRequestURI().startsWith("/api/report")){
-//            log.info("status is " + response.getStatus());
-//        }
+        if (request.getRequestURI().startsWith("/api/report") || request.getRequestURI().startsWith("/api/table-query")){
+            log.info("status is " + response.getStatus());
+        }
         log.info("status is " + response.getStatus());
         try {
             if(ex != null) {
