@@ -1,4 +1,4 @@
-package ru.vk.competition.minbenchmark.log;
+package ru.vk.competition.minbenchmark.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.vk.competition.minbenchmark.dto.report.ReportDto;
+import ru.vk.competition.minbenchmark.log.ReportService;
 
 @RequestMapping("/api/report")
 @RestController

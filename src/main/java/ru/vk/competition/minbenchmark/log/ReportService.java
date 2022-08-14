@@ -54,10 +54,10 @@ public class ReportService {
                 ColumnInfos existedColumn = columnInfos.get(i);
 
                 /// TODO: 14.08.2022 ВЕРНИ ПРОВЕРКУ, ЭТО БАГ!
-//                if (!reportColumn.getTitle().equalsIgnoreCase(existedColumn.getTitle())) {
-//                    log.info("Не совпадает название полей {}. ОШИБКА", reportColumn.getTitle());
-//                    return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-//                }
+                if (!reportColumn.getTitle().equalsIgnoreCase(existedColumn.getTitle())) {
+                    log.info("Не совпадает название полей {}. ОШИБКА", reportColumn.getTitle());
+                    return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                }
 
                 if (!reportColumn.getType().equalsIgnoreCase(existedColumn.getType())) {
                     log.info("Не совпадает тип полей {}. ОШИБКА", existedColumn.getTitle());

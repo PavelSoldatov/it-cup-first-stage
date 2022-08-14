@@ -41,4 +41,9 @@ public class SingleQueryController {
     public ResponseEntity<Void> modifyQueryInTable(@RequestBody SingleQuery singleQuery) {
         return singleQueryService.updateQueryWithQueryId(singleQuery);
     }
+
+    @GetMapping("/execute-single-query-by-id/{id}")
+    public void executeSingleQueryById(@PathVariable Integer id) {
+        singleQueryService.executeSingleQuery(id);
+    }
 }

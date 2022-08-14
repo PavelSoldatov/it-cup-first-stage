@@ -22,23 +22,23 @@ public class TableQueryService {
     private final JdbcTemplate jdbcTemplate;
 
     public void addNewTableQuery(AddNewQueryDto newQueryDto) {
-//        QueryUtils.validateSizeTableName(newQueryDto.getTableName());
-//        QueryUtils.validateSizeQuery(newQueryDto.getQuery());
+        QueryUtils.validateSizeTableName(newQueryDto.getTableName());
+        QueryUtils.validateSizeQuery(newQueryDto.getQuery());
         QueryUtils.validateCharacter(newQueryDto.getQuery());
 
         String tableName = newQueryDto.getTableName();
-//        boolean tableExist = TableService.tableStorage.containsKey(tableName);
+        boolean tableExist = TableService.tableStorage.containsKey(tableName);
 
-//        if (tableExist) {
+        if (tableExist) {
             TableQuery tableQuery = new TableQuery()
                     .setQueryId(newQueryDto.getQueryId())
                     .setTableName(tableName)
                     .setQuery(newQueryDto.getQuery());
 
             tableQueryRepository.save(tableQuery);
-//        } else {
-//            throw new RuntimeException("Таблицы не существует");
-//        }
+        } else {
+            throw new RuntimeException("Таблицы не существует");
+        }
     }
 
     public void modifyTableQuery(ModifyQueryDto modifyQueryDto) {
@@ -47,9 +47,9 @@ public class TableQueryService {
         QueryUtils.validateCharacter(modifyQueryDto.getQuery());
 
         String tableName = modifyQueryDto.getTableName();
-//        boolean tableExist = TableService.tableStorage.containsKey(tableName);
+        boolean tableExist = TableService.tableStorage.containsKey(tableName);
 
-//        if (tableExist) {
+        if (tableExist) {
             TableQuery existedQuery = tableQueryRepository.findByQueryId(modifyQueryDto.getQueryId());
 
             if(existedQuery == null) {
@@ -58,9 +58,9 @@ public class TableQueryService {
 
             existedQuery.setQuery(modifyQueryDto.getQuery());
             existedQuery.setTableName(modifyQueryDto.getTableName());
-//        } else {
-//            throw new RuntimeException("Таблицы не существует");
-//        }
+        } else {
+            throw new RuntimeException("Таблицы не существует");
+        }
     }
 
     public void deleteTableQueryById(int queryId) {
