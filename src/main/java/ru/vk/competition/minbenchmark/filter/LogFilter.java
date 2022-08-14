@@ -29,12 +29,17 @@ public class LogFilter implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("status is " + response.getStatus());
+//        if (request.getContextPath().startsWith("/api/report")){
+            log.info("status is " + response.getStatus());
+//        }
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+//        if (request.getRequestURI().startsWith("/api/report")){
+//            log.info("status is " + response.getStatus());
+//        }
         log.info("status is " + response.getStatus());
         try {
             if(ex != null) {

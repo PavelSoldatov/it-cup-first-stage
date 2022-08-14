@@ -102,6 +102,34 @@ public class TableQueryControllerTest {
     }
 
     @Test
+    public void getAllTableQueries_500() {
+        List<TableQueriesResponseDto> pageOfDto1 = testUtils.invokeGetApi(new ParameterizedTypeReference<List<TableQueriesResponseDto>>() {
+        }, "/api/table-query/get-all-table-queries", HttpStatus.OK);
+        Assertions.assertEquals(pageOfDto1.size(), 0);
+    }
+
+//    @Test
+//    public void findTableByName() {
+//        list
+//        new ColumnInfos().setTitle("name").setType("VARCHAR"),
+//                new ColumnInfos().setTitle("name").setType("VARCHAR")
+//
+//        testUtils.invokePostApi(
+//                Void.class, "/api/table/create-table",
+//                HttpStatus.CREATED,
+//                new CreateTableDto()
+//                        .setTableName("test")
+//                        .setPrimaryKey("primKey")
+//                        .setColumnsAmount(2)
+//                        .setColumnInfos(new ArrayList<ColumnInfos>())
+//        );
+//
+//        List<CreateTableDto> pageOfDto1 = testUtils.invokeGetApi(new ParameterizedTypeReference<List<CreateTableDto>>() {
+//        }, "/api/table/get-table-by-name/test", HttpStatus.OK);
+//        Assertions.assertEquals(pageOfDto1.size(), 0);
+//    }
+
+    @Test
     public void countReport() {
         CreateTableDto createTableDto =
                 new CreateTableDto().setTableName("NAMES")
