@@ -85,4 +85,10 @@ public class TableQueryControllerTest {
 
         Assertions.assertEquals(pageOfDto1.size(), 0);
     }
+
+    @Test
+    public void getQueryById_500() {
+        List<TableQueriesResponseDto> pageOfDto1 = testUtils.invokeGetApi(new ParameterizedTypeReference<List<TableQueriesResponseDto>>() {
+        }, "/api/table-query/get-table-query-by-id/1", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

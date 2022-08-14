@@ -17,4 +17,10 @@ public class GlobalExceptionHandler {
        log.info("exception from EXCEPTION HANDLER " + ex.getMessage(), ex.getCause(), ex.getStackTrace());
     }
 
+    @ExceptionHandler({QueryNotFoundException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public void handleRfidAccessDeniedException(QueryNotFoundException ex) {
+        log.info("exception from EXCEPTION HANDLER " + ex.getMessage(), ex.getCause(), ex.getStackTrace());
+    }
+
 }

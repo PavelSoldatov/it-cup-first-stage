@@ -7,6 +7,7 @@ import ru.vk.competition.minbenchmark.dto.query.AddNewQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.ModifyQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
 import ru.vk.competition.minbenchmark.entity.TableQuery;
+import ru.vk.competition.minbenchmark.exception.QueryNotFoundException;
 import ru.vk.competition.minbenchmark.repository.TableQueryRepository;
 import ru.vk.competition.minbenchmark.util.QueryUtils;
 
@@ -79,6 +80,9 @@ public class TableQueryService {
 
     public TableQueriesResponseDto getTableQueryById(int queryId) {
         TableQuery byQueryId = tableQueryRepository.findByQueryId(queryId);
+        if(byQueryId == null) {
+           throw new QueryNotFoundException("query not found");
+        }
         return new TableQueriesResponseDto(byQueryId.getQueryId(), byQueryId.getTableName(), byQueryId.getQuery());
     }
 
