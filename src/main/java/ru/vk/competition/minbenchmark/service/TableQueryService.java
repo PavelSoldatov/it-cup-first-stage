@@ -8,6 +8,7 @@ import ru.vk.competition.minbenchmark.dto.query.ModifyQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
 import ru.vk.competition.minbenchmark.entity.TableQuery;
 import ru.vk.competition.minbenchmark.repository.TableQueryRepository;
+import ru.vk.competition.minbenchmark.util.QueryUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,11 +21,16 @@ public class TableQueryService {
     private final JdbcTemplate jdbcTemplate;
 
     public void addNewTableQuery(AddNewQueryDto newQueryDto) {
+        QueryUtils.validateSizeTableName(newQueryDto.getTableName());
+        QueryUtils.validateSizeQuery(newQueryDto.getQuery());
+        QueryUtils.validateCharacter(newQueryDto.getQuery());
+
         String tableName = newQueryDto.getTableName();
         boolean tableExist = TableService.tableStorage.containsKey(tableName);
 
         if (tableExist) {
-            TableQuery tableQuery = new TableQuery().setQueryId(newQueryDto.getQueryId())
+            TableQuery tableQuery = new TableQuery()
+                    .setQueryId(newQueryDto.getQueryId())
                     .setTableName(tableName)
                     .setQuery(newQueryDto.getQuery());
 
@@ -35,11 +41,19 @@ public class TableQueryService {
     }
 
     public void modifyTableQuery(ModifyQueryDto modifyQueryDto) {
+        QueryUtils.validateSizeTableName(modifyQueryDto.getTableName());
+        QueryUtils.validateSizeQuery(modifyQueryDto.getQuery());
+        QueryUtils.validateCharacter(modifyQueryDto.getQuery());
+
         String tableName = modifyQueryDto.getTableName();
         boolean tableExist = TableService.tableStorage.containsKey(tableName);
 
         if (tableExist) {
             TableQuery existedQuery = tableQueryRepository.findByQueryId(modifyQueryDto.getQueryId());
+
+            if(existedQuery == null) {
+                throw new RuntimeException("запроса с таким id не существует");
+            }
 
             existedQuery.setQuery(modifyQueryDto.getQuery());
             existedQuery.setTableName(modifyQueryDto.getTableName());
