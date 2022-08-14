@@ -7,13 +7,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import ru.vk.competition.minbenchmark.dto.ColumnInfos;
 import ru.vk.competition.minbenchmark.dto.CreateTableDto;
 import ru.vk.competition.minbenchmark.dto.query.AddNewQueryDto;
 import ru.vk.competition.minbenchmark.dto.query.TableQueriesResponseDto;
+import ru.vk.competition.minbenchmark.dto.report.Columns;
+import ru.vk.competition.minbenchmark.dto.report.ReportDto;
+import ru.vk.competition.minbenchmark.dto.report.TablesDto;
 import ru.vk.competition.minbenchmark.repository.TableQueryRepository;
 import ru.vk.competition.minbenchmark.service.TableService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ActiveProfiles("test")
@@ -23,6 +29,9 @@ public class TableQueryControllerTest {
 
     @Autowired
     private TableQueryRepository tableQueryRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private TestUtils testUtils;
@@ -90,5 +99,41 @@ public class TableQueryControllerTest {
     public void getQueryById_500() {
         List<TableQueriesResponseDto> pageOfDto1 = testUtils.invokeGetApi(new ParameterizedTypeReference<List<TableQueriesResponseDto>>() {
         }, "/api/table-query/get-table-query-by-id/1", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    public void countReport() {
+        CreateTableDto createTableDto =
+                new CreateTableDto().setTableName("NAMES")
+                        .setColumnsAmount(2)
+                        .setColumnInfos(List.of(new ColumnInfos()
+                                .setTitle("id")
+                                .setType("int4"),
+                                        new ColumnInfos()
+                                        .setTitle("name")
+                                        .setType("VARCHAR(40)")))
+                        .setPrimaryKey("id");
+
+
+        testUtils.invokePostApi(Void.class, "/api/table/create-table", HttpStatus.CREATED, createTableDto);
+
+        jdbcTemplate.execute("INSERT INTO NAMES (id, name) VALUES (1, 'pasha')");
+        jdbcTemplate.execute("INSERT INTO NAMES (id, name) VALUES (2, null)");
+
+        ReportDto reportDto =
+                new ReportDto().setReportId(1)
+                        .setTableAmount("1")
+                        .setTables(List.of(new TablesDto().setTableName("NAMES")
+                                .setColumns(List.of(new Columns().setTitle("id").setType("int4"),
+                                        new Columns().setTitle("name").setType("VARCHAR(40)")))));
+
+        testUtils.invokePostApi(Void.class, "/api/report/create-report", HttpStatus.CREATED, reportDto);
+
+        ReportDto reportDto1 = testUtils.invokeGetApi(new ParameterizedTypeReference<ReportDto>() {
+                                                      }, "/api/report/get-report-by-id/1",
+                HttpStatus.CREATED, reportDto);
+
+        int reportId = reportDto1.getReportId();
+
     }
 }

@@ -3,6 +3,7 @@ package ru.vk.competition.minbenchmark.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.vk.competition.minbenchmark.dto.ColumnInfos;
 import ru.vk.competition.minbenchmark.dto.CreateTableDto;
@@ -20,6 +21,8 @@ import static ru.vk.competition.minbenchmark.service.TableService.*;
 public class ReportService {
 
     public static ConcurrentHashMap<Integer, ReportDto> reportStorage = new ConcurrentHashMap<>();
+
+    private final JdbcTemplate jdbcTemplate;
 
     public ResponseEntity<Void> createReport(ReportDto reportDto) {
         if (reportStorage.containsKey(reportDto.getReportId())) {
@@ -59,7 +62,20 @@ public class ReportService {
 
     public ReportDto getReportById(int id) {
         if (reportStorage.containsKey(id)) {
-            return reportStorage.get(id);
+            ReportDto reportDto = reportStorage.get(id);
+
+            reportDto.getTables().forEach(table -> {
+                String tableName = table.getTableName();
+
+                List<Columns> columns = table.getColumns();
+                for (Columns col : columns) {
+                    Integer notNullValuesCount =
+                            jdbcTemplate.queryForObject("SELECT COUNT(" + col.getTitle().toUpperCase() + ") FROM " + tableName.toUpperCase(), Integer.class);
+                    col.setSize(String.valueOf(notNullValuesCount));
+                }
+            });
+
+            return reportDto;
         } else {
             throw new RuntimeException("Не существует такого отчета");
         }
