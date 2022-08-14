@@ -32,12 +32,12 @@ public class ReportService {
 
         List<TablesDto> tables = reportDto.getTables();
         for (TablesDto table : tables) {
-            if (!tableStorage.containsKey(table.getTableInfo().getTableName())) {
+            if (!tableStorage.containsKey(table.getTableName())) {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
 
-            List<Columns> columns = table.getTableInfo().getColumns();
-            List<ColumnInfos> columnInfos = tableStorage.get(table.getTableInfo().getTableName()).getColumnInfos();
+            List<Columns> columns = table.getColumns();
+            List<ColumnInfos> columnInfos = tableStorage.get(table.getTableName()).getColumnInfos();
 
             for (int i = 0; i < columns.size(); i++) {
                 Columns reportColumn = columns.get(i);
