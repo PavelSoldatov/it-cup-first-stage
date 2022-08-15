@@ -22,9 +22,9 @@ public class TableQueryService {
     private final JdbcTemplate jdbcTemplate;
 
     public void addNewTableQuery(AddNewQueryDto newQueryDto) {
-        QueryUtils.validateSizeTableName(newQueryDto.getTableName());
-        QueryUtils.validateSizeQuery(newQueryDto.getQuery());
-        QueryUtils.validateCharacter(newQueryDto.getQuery());
+//        QueryUtils.validateSizeTableName(newQueryDto.getTableName());
+//        QueryUtils.validateSizeQuery(newQueryDto.getQuery());
+//        QueryUtils.validateCharacter(newQueryDto.getQuery());
 
         String tableName = newQueryDto.getTableName();
         boolean tableExist = TableService.tableStorage.containsKey(tableName);
@@ -42,9 +42,9 @@ public class TableQueryService {
     }
 
     public void modifyTableQuery(ModifyQueryDto modifyQueryDto) {
-        QueryUtils.validateSizeTableName(modifyQueryDto.getTableName());
-        QueryUtils.validateSizeQuery(modifyQueryDto.getQuery());
-        QueryUtils.validateCharacter(modifyQueryDto.getQuery());
+//        QueryUtils.validateSizeTableName(modifyQueryDto.getTableName());
+//        QueryUtils.validateSizeQuery(modifyQueryDto.getQuery());
+//        QueryUtils.validateCharacter(modifyQueryDto.getQuery());
 
         String tableName = modifyQueryDto.getTableName();
         boolean tableExist = TableService.tableStorage.containsKey(tableName);
