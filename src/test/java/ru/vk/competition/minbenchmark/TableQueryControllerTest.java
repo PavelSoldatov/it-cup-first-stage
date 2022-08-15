@@ -108,27 +108,6 @@ public class TableQueryControllerTest {
         Assertions.assertEquals(pageOfDto1.size(), 0);
     }
 
-//    @Test
-//    public void findTableByName() {
-//        list
-//        new ColumnInfos().setTitle("name").setType("VARCHAR"),
-//                new ColumnInfos().setTitle("name").setType("VARCHAR")
-//
-//        testUtils.invokePostApi(
-//                Void.class, "/api/table/create-table",
-//                HttpStatus.CREATED,
-//                new CreateTableDto()
-//                        .setTableName("test")
-//                        .setPrimaryKey("primKey")
-//                        .setColumnsAmount(2)
-//                        .setColumnInfos(new ArrayList<ColumnInfos>())
-//        );
-//
-//        List<CreateTableDto> pageOfDto1 = testUtils.invokeGetApi(new ParameterizedTypeReference<List<CreateTableDto>>() {
-//        }, "/api/table/get-table-by-name/test", HttpStatus.OK);
-//        Assertions.assertEquals(pageOfDto1.size(), 0);
-//    }
-
     @Test
     public void countReport() {
         CreateTableDto createTableDto =
@@ -163,5 +142,43 @@ public class TableQueryControllerTest {
 
         int reportId = reportDto1.getReportId();
 
+    }
+
+    @Test
+    public void changeNameWhenAlterTableName() {
+        CreateTableDto createTableDto =
+                new CreateTableDto().setTableName("NAMES")
+                        .setColumnsAmount(2)
+                        .setColumnInfos(List.of(new ColumnInfos()
+                                        .setTitle("id")
+                                        .setType("int4"),
+                                new ColumnInfos()
+                                        .setTitle("name")
+                                        .setType("VARCHAR(40)")))
+                        .setPrimaryKey("id");
+
+
+        testUtils.invokePostApi(Void.class, "/api/table/create-table", HttpStatus.CREATED, createTableDto);
+
+        TableService.tableStorage.put("test_table", new CreateTableDto());
+        testUtils.invokePostApi(
+                Void.class, "/api/table-query/add-new-query-to-table",
+                HttpStatus.CREATED,
+                new AddNewQueryDto().setQueryId(1).setTableName("NAMES").setQuery("ALTER TABLE NAMES RENAME TO NEWNAME")
+        );
+
+        testUtils.invokePostApi(
+                Void.class, "/api/table-query/add-new-query-to-table",
+                HttpStatus.CREATED,
+                new AddNewQueryDto().setQueryId(2).setTableName("NAMES").setQuery("SELECT * FROM NAMES")
+        );
+
+        testUtils.invokeGetApi(
+                new ParameterizedTypeReference<Void>() {
+                }, "/api/table-query/execute-table-query-by-id/1",
+                HttpStatus.OK
+        );
+
+        Assertions.assertEquals(tableQueryRepository.findAllByTableName("NEWNAME").size(), 2);
     }
 }

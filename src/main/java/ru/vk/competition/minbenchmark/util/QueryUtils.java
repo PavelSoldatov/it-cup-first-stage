@@ -40,4 +40,14 @@ public class QueryUtils {
         }
         return result;
     }
+
+    public boolean containsAlterTableRename(String query) {
+        String s = query.toUpperCase();
+        return s.startsWith("ALTER TABLE") || s.contains("RENAME TO");
+    }
+
+    public String getNewQueryName(String query) {
+        String[] s = query.split(" ");
+        return s[s.length - 1];
+    }
 }

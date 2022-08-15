@@ -15,4 +15,6 @@ public interface TableQueryRepository extends JpaRepository<TableQuery, Integer>
     List<TableQuery> findAllByTableName(String tableName);
 
     List<TableQuery> findAll();
+
+    void deleteAllByTableName(String tableName);
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.vk.competition.minbenchmark.dto.ColumnInfos;
 import ru.vk.competition.minbenchmark.dto.CreateTableDto;
+import ru.vk.competition.minbenchmark.repository.SingleQueryRepository;
+import ru.vk.competition.minbenchmark.repository.TableQueryRepository;
 import ru.vk.competition.minbenchmark.util.QueryUtils;
 
 import java.sql.ResultSet;
@@ -29,6 +31,7 @@ public class TableService {
     public static ConcurrentHashMap<String, CreateTableDto> tableStorage = new ConcurrentHashMap<>();
 
     private final JdbcTemplate jdbcTemplate;
+    private final TableQueryRepository tableQueryRepository;
 
     @Transactional
     @SneakyThrows
@@ -38,7 +41,7 @@ public class TableService {
             throw new RuntimeException("no columns for create");
         }
 
-        QueryUtils.validateCharacter(createTableDto.getTableName());
+//        QueryUtils.validateCharacter(createTableDto.getTableName());
         StringBuilder sb = new StringBuilder();
         List<String> creationParams = new ArrayList<>();
         String createTableQuery = "CREATE TABLE " + createTableDto.getTableName() + " (";
@@ -87,5 +90,6 @@ public class TableService {
         }
         jdbcTemplate.execute("DROP TABLE " + tableName);
         tableStorage.remove(tableName);
+        tableQueryRepository.deleteAllByTableName(tableName);
     }
 }

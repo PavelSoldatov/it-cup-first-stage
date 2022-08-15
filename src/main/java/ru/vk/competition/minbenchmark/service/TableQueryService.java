@@ -103,6 +103,13 @@ public class TableQueryService {
             jdbcTemplate.execute(
                     byQueryId.getQuery()
             );
+
+            if(QueryUtils.containsAlterTableRename(byQueryId.getQuery())){
+                String newTableName = QueryUtils.getNewQueryName(byQueryId.getQuery());
+                var newQueries = tableQueryRepository.findAllByTableName(byQueryId.getTableName())
+                        .stream().map(e -> e.setTableName(newTableName)).toList();
+                tableQueryRepository.saveAll(newQueries);
+            }
         } else {
             throw new RuntimeException("Таблицы не существует");
         }
